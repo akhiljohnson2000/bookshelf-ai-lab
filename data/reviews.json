@@ -1,0 +1,34 @@
+[
+    {
+      "id": "review_001",
+      "bookId": "book_001",
+      "userId": "user_001",
+      "rating": 5,
+      "text": "Excellent engineering principles.",
+      "createdAt": "2026-06-15T12:00:00Z"
+    },
+    {
+      "id": "review_002",
+      "bookId": "book_003",
+      "userId": "user_001",
+      "rating": 5,
+      "text": "Very practical and easy to apply.",
+      "createdAt": "2026-06-15T12:10:00Z"
+    },
+    {
+      "id": "review_003",
+      "bookId": "book_005",
+      "userId": "user_002",
+      "rating": 4,
+      "text": "Classic fantasy adventure.",
+      "createdAt": "2026-06-15T12:20:00Z"
+    },
+    {
+      "id": "review_004",
+      "bookId": "book_009",
+      "userId": "user_003",
+      "rating": 5,
+      "text": "Changed my perspective on money.",
+      "createdAt": "2026-06-15T12:30:00Z"
+    }
+  ]

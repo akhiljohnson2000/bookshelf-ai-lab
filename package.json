@@ -1,0 +1,18 @@
+{
+  "name": "bookshelf-ai-lab",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=@bookshelf/api",
+    "start": "npm run build && npm run start --workspace=@bookshelf/api",
+    "lint": "npm run lint --workspace=@bookshelf/api",
+    "build": "npm run build --workspace=@bookshelf/shared && npm run build --workspace=@bookshelf/api"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

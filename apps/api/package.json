@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "npm run build --workspace=@bookshelf/shared && tsx watch src/server.ts",
     "start": "node dist/server.js",

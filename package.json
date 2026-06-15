@@ -13,6 +13,6 @@
     "build": "npm run build --workspace=@bookshelf/shared && npm run build --workspace=@bookshelf/api"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   }
 }

@@ -2,14 +2,14 @@ import type { NextFunction, Request, Response } from 'express';
 import type { CreateBookPayload } from '@bookshelf/shared';
 import { ValidationError } from '@bookshelf/shared';
 
-const REQUIRED_FIELDS: (keyof CreateBookPayload)[] = [
-  'title',
-  'author',
-  'genre',
-  'year',
-  'isbn',
-  'description',
-];
+const TITLE_MAX_LENGTH = 200;
+const MIN_YEAR = 1000;
+
+type FieldErrors = Partial<Record<keyof CreateBookPayload, string>>;
+
+function isNonEmptyString(value: unknown): value is string {
+  return typeof value === 'string' && value.trim() !== '';
+}
 
 export function validateBookPayload(
   req: Request,
@@ -17,51 +17,56 @@ export function validateBookPayload(
   next: NextFunction,
 ): void {
   const body = req.body as Record<string, unknown>;
-  const errors: string[] = [];
+  const errors: FieldErrors = {};
 
-  for (const field of REQUIRED_FIELDS) {
-    const value = body[field];
-    if (value === undefined || value === null || value === '') {
-      errors.push(`${field} is required`);
-    }
+  // title: required string, max 200 chars
+  if (!isNonEmptyString(body.title)) {
+    errors.title = 'title is required';
+  } else if (body.title.trim().length > TITLE_MAX_LENGTH) {
+    errors.title = `title must be ${TITLE_MAX_LENGTH} characters or fewer`;
   }
 
-  if (body.title !== undefined && typeof body.title !== 'string') {
-    errors.push('title must be a string');
+  // author: required string
+  if (!isNonEmptyString(body.author)) {
+    errors.author = 'author is required';
   }
 
-  if (body.author !== undefined && typeof body.author !== 'string') {
-    errors.push('author must be a string');
+  // genre: required string
+  if (!isNonEmptyString(body.genre)) {
+    errors.genre = 'genre is required';
   }
 
-  if (body.genre !== undefined && typeof body.genre !== 'string') {
-    errors.push('genre must be a string');
-  }
-
-  if (body.year !== undefined) {
+  // year: required integer between 1000 and current year + 1
+  const maxYear = new Date().getFullYear() + 1;
+  if (body.year === undefined || body.year === null || body.year === '') {
+    errors.year = 'year is required';
+  } else {
     const year = Number(body.year);
-    if (!Number.isInteger(year) || year < 1000 || year > new Date().getFullYear() + 1) {
-      errors.push('year must be a valid integer');
+    if (!Number.isInteger(year) || year < MIN_YEAR || year > maxYear) {
+      errors.year = `year must be an integer between ${MIN_YEAR} and ${maxYear}`;
     }
   }
 
-  if (body.isbn !== undefined && typeof body.isbn !== 'string') {
-    errors.push('isbn must be a string');
+  // isbn: required string
+  if (!isNonEmptyString(body.isbn)) {
+    errors.isbn = 'isbn is required';
   }
 
-  if (body.description !== undefined && typeof body.description !== 'string') {
-    errors.push('description must be a string');
+  // description: required string
+  if (!isNonEmptyString(body.description)) {
+    errors.description = 'description is required';
   }
 
+  // coverUrl: optional string or null
   if (
     body.coverUrl !== undefined &&
     body.coverUrl !== null &&
     typeof body.coverUrl !== 'string'
   ) {
-    errors.push('coverUrl must be a string or null');
+    errors.coverUrl = 'coverUrl must be a string or null';
   }
 
-  if (errors.length > 0) {
+  if (Object.keys(errors).length > 0) {
     next(new ValidationError('Invalid book payload', errors));
     return;
   }

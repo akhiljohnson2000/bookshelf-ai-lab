@@ -46,8 +46,8 @@ Use a non-default port (e.g. `4222`) to avoid clashing with a running dev server
 
 ## Constraints
 - Don't run mutating tests against the real `/data` — always the throwaway copy.
-- Don't add a test-runner dependency to satisfy a request — this skill is HTTP smoke-testing.
-  (When a real suite is added it's Vitest/Jest with mocked data access, per CLAUDE.md.)
+- This skill is HTTP smoke-testing. For unit tests, use Vitest (`npm test`) with mocked
+  data access — keep the two separate, don't conflate them.
 - Don't leave servers running or temp dirs behind — always clean up.
 
 ## Example output

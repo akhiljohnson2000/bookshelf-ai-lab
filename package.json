@@ -11,6 +11,7 @@
     "dev:web": "npm run dev --workspace=@bookshelf/web",
     "start": "npm run build && npm run start --workspace=@bookshelf/api",
     "lint": "npm run lint --workspace=@bookshelf/api",
+    "test": "npm run test --workspace=@bookshelf/api",
     "build": "npm run build --workspace=@bookshelf/shared && npm run build --workspace=@bookshelf/api",
     "build:web": "npm run build --workspace=@bookshelf/shared && npm run build --workspace=@bookshelf/web"
   },

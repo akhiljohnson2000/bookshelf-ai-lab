@@ -7,7 +7,7 @@ endpoints yet. Monorepo; all data lives in JSON files — there is no database.
 - `npm run dev` — API on `http://localhost:4000` (base path `/api`)
 - `npm run dev:web` — Vite/React frontend on `http://localhost:5173` (calls the API via CORS)
 - `npm run build` — build shared package, then API · `npm run lint` — ESLint
-- No test runner is configured yet.
+- `npm test` — Vitest unit tests (`apps/api`), run against mocked data access
 
 # Tech Stack
 - **Runtime:** Node.js 20+ (ESM — `"type": "module"`)
@@ -49,8 +49,8 @@ types and error classes live in a separate package consumed by the API.
 - Mutations that must reject duplicates throw `ConflictError` from inside the `updateJson` updater.
 
 # Testing
-- No test suite yet. When added: Vitest/Jest with the AAA pattern (Arrange/Act/Assert).
-- Mock the data-access layer — don't read real JSON files in tests.
+- Vitest (`npm test`), AAA pattern (Arrange/Act/Assert). Test files are excluded from the build.
+- Mock the data-access layer (`vi.mock('../data/...')`) — don't read real JSON files in tests.
 - Place test files next to source: `books.service.ts` → `books.service.test.ts`.
 
 # What NOT to do
@@ -65,4 +65,4 @@ types and error classes live in a separate package consumed by the API.
   `POST /api/books` (validated), `GET /api/books/search?q=`. Plus `GET /health`.
 - Frontend (`apps/web`) scaffolded: catalogue page with live search against the API.
 - Seed data: 51 books, plus shelves/reviews JSON with no endpoints yet.
-- No automated tests; no file locking on JSON writes (fine for this single-user project).
+- Unit tests: Vitest set up in `apps/api` (search service covered); no file locking on JSON writes (fine for this single-user project).

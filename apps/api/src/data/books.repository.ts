@@ -67,3 +67,36 @@ export async function deleteBook(id: string): Promise<void> {
     return books.filter((book) => book.id !== id);
   });
 }
+
+export async function updateBook(id: string, payload: CreateBookPayload): Promise<Book> {
+  let updatedBook: Book | undefined;
+
+  await updateJson<Book[]>(dataFiles.books, (books) => {
+    const existing = books.find((book) => book.id === id);
+    if (!existing) {
+      throw new NotFoundError(`Book with id '${id}' not found`);
+    }
+
+    const duplicateIsbn = books.some(
+      (book) => book.isbn === payload.isbn && book.id !== id,
+    );
+    if (duplicateIsbn) {
+      throw new ConflictError(`A book with ISBN ${payload.isbn} already exists`);
+    }
+
+    updatedBook = {
+      ...existing,
+      title: payload.title,
+      author: payload.author,
+      genre: payload.genre,
+      year: payload.year,
+      isbn: payload.isbn,
+      description: payload.description,
+      coverUrl: payload.coverUrl ?? null,
+    };
+
+    return books.map((book) => (book.id === id ? updatedBook! : book));
+  });
+
+  return updatedBook!;
+}

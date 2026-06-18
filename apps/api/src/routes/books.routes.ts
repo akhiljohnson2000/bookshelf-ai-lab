@@ -54,6 +54,16 @@ router.post('/', validateBookPayload, async (req: Request, res: Response, next: 
   }
 });
 
+router.put('/:id', validateBookPayload, async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = String(req.params.id);
+    const book = await booksService.updateBook(id, req.body);
+    res.json({ success: true, data: book });
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = String(req.params.id);

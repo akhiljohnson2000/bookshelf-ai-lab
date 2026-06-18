@@ -42,6 +42,13 @@ export async function createBook(
   return booksRepository.createBook(payload);
 }
 
+export async function updateBook(
+  id: string,
+  payload: Parameters<typeof booksRepository.updateBook>[1],
+): Promise<Book> {
+  return booksRepository.updateBook(id, payload);
+}
+
 export async function deleteBook(id: string): Promise<{ id: string; removedFromShelves: number }> {
   await booksRepository.deleteBook(id);
   const removedFromShelves = await shelvesRepository.removeBookFromAllShelves(id);

@@ -1,0 +1,23 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/akhiljohnson/Documents/bookshelf-ai-lab"
+      ]
+    },
+    "github": {
+      "command": "sh",
+      "args": [
+        "-c",
+        "set -a; [ -f .env ] && . ./.env; set +a; exec npx -y @modelcontextprotocol/server-github"
+      ]
+    },
+    "bookshelf": {
+      "command": "npx",
+      "args": ["-y", "tsx", "apps/mcp/src/server.ts"]
+    }
+  }
+}

@@ -2,7 +2,9 @@ import { Router } from 'express';
 import type { Request, Response, NextFunction } from 'express';
 import { ValidationError } from '@bookshelf/shared';
 import * as booksService from '../services/books.service.js';
+import * as reviewsService from '../services/reviews.service.js';
 import { validateBookPayload } from '../middleware/validateBookPayload.js';
+import { validateReviewPayload } from '../middleware/validateReviewPayload.js';
 
 const router = Router();
 
@@ -73,5 +75,27 @@ router.delete('/:id', async (req: Request, res: Response, next: NextFunction) =>
     next(error);
   }
 });
+
+router.get('/:id/reviews', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const reviews = await reviewsService.getReviewsForBook(String(req.params.id));
+    res.json({ success: true, data: reviews });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post(
+  '/:id/reviews',
+  validateReviewPayload,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const review = await reviewsService.createReview(String(req.params.id), req.body);
+      res.status(201).json({ success: true, data: review });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 export default router;

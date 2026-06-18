@@ -62,7 +62,8 @@ types and error classes live in a separate package consumed by the API.
 
 # Current state
 - Books API complete: `GET /api/books` (filters + pagination), `GET /api/books/:id`,
-  `POST /api/books` (validated), `GET /api/books/search?q=`. Plus `GET /health`.
+  `POST /api/books` (validated), `PUT`/`DELETE /api/books/:id`, `GET /api/books/search?q=`. Plus `GET /health`.
+- Reviews API: `GET` + `POST /api/books/:id/reviews` (validated; 404 if the book is missing).
 - Frontend (`apps/web`) scaffolded: catalogue page with live search against the API.
-- Seed data: 51 books, plus shelves/reviews JSON with no endpoints yet.
+- Seed data: 51 books, plus shelves JSON with no endpoints yet.
 - Unit tests: Vitest set up in `apps/api` (search service covered); no file locking on JSON writes (fine for this single-user project).

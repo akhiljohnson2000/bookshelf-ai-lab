@@ -37,6 +37,12 @@ export interface Review {
   createdAt: string;
 }
 
+export interface CreateReviewPayload {
+  rating: number;
+  text: string;
+  userId?: string;
+}
+
 export interface PaginationMeta {
   page: number;
   limit: number;

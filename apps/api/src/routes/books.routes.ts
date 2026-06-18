@@ -54,4 +54,14 @@ router.post('/', validateBookPayload, async (req: Request, res: Response, next: 
   }
 });
 
+router.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = String(req.params.id);
+    const result = await booksService.deleteBook(id);
+    res.json({ success: true, data: result });
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default router;

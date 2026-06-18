@@ -56,3 +56,14 @@ export async function requireBookById(id: string): Promise<Book> {
   }
   return book;
 }
+
+export async function deleteBook(id: string): Promise<void> {
+  await updateJson<Book[]>(dataFiles.books, (books) => {
+    const exists = books.some((book) => book.id === id);
+    if (!exists) {
+      throw new NotFoundError(`Book with id '${id}' not found`);
+    }
+
+    return books.filter((book) => book.id !== id);
+  });
+}

@@ -1,0 +1,15 @@
+---
+description: Request validation belongs in middleware, with field-level messages
+globs: apps/api/src/middleware/**/*.ts
+alwaysApply: false
+---
+
+# Validation
+
+- Validation lives in middleware (e.g. `validateBookPayload`), NOT in route handlers.
+- On failure, `next(new ValidationError(message, details))` — let the error handler respond.
+- `ValidationError`'s `details` is a field-keyed object of messages:
+  `{ title: "title is required", year: "year must be an integer between 1000 and 2027" }`.
+- Collect ALL field errors in one pass, then return them together — don't fail on the first.
+- After validating, normalize `req.body` to the typed payload (trim strings, coerce numbers)
+  so downstream services receive clean, typed input.

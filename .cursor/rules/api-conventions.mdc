@@ -1,0 +1,29 @@
+---
+description: HTTP response and error conventions for the BookShelf API
+globs: apps/api/**/*.ts
+alwaysApply: false
+---
+
+# API response & error conventions
+
+- Import response types from `@bookshelf/shared` — never hand-roll the shapes:
+  - `SuccessResponse<T>` → `{ success: true, data }` (single resource; status `201` on create)
+  - `PaginatedResponse<T>` → `{ success: true, data, meta }` (list endpoints)
+  - `ErrorResponse` → `{ success: false, error: { message, code?, details? } }`
+- On error, `throw` an `AppError` subclass (`NotFoundError`, `ValidationError`,
+  `ConflictError`). The central `errorHandler` formats the response.
+- Never `res.send` a raw string and never build error JSON by hand in a route.
+- Routes stay thin: parse input, call a service, send the result. Business logic lives in services.
+- Early returns over nested `if/else`. Named exports, never default exports. No `any` — use `unknown` and narrow.
+
+Example route:
+```ts
+router.get('/:id', async (req, res, next) => {
+  try {
+    const book = await booksService.getBook(String(req.params.id));
+    res.json({ success: true, data: book });
+  } catch (error) {
+    next(error);
+  }
+});
+```

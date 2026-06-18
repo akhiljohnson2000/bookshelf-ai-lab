@@ -1,0 +1,28 @@
+---
+description: JSON data-access rules — how routes/services/repositories touch data
+globs: apps/api/src/{data,services,routes}/**/*.ts
+alwaysApply: false
+---
+
+# Data layer
+
+- All reads/writes go through `apps/api/src/data/`. NEVER import `fs` or touch
+  `/data/*.json` directly from a route or service.
+- Use `readJson` / `updateJson` from `jsonStore.ts`. Writes are atomic (temp file + `rename`) —
+  don't reimplement file writing.
+- Mutations that must reject duplicates throw `ConflictError` from INSIDE the `updateJson`
+  updater callback, so the check and write are atomic.
+- IDs are prefixed, zero-padded strings (`book_001`). Generate a new id by incrementing the
+  highest existing one (see `generateNextBookId` in `books.repository.ts`), never random/UUID.
+- Repositories are entity-scoped (`books.repository.ts`); services orchestrate them
+  (`books.service.ts`). Keep filtering/pagination/search in services, not repositories.
+
+Example mutation:
+```ts
+await updateJson<Book[]>(dataFiles.books, (books) => {
+  if (books.some((b) => b.isbn === payload.isbn)) {
+    throw new ConflictError(`A book with ISBN ${payload.isbn} already exists`);
+  }
+  return [...books, newBook];
+});
+```

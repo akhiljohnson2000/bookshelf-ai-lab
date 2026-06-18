@@ -1,5 +1,6 @@
 import type { Book, BookFilters, BookQueryParams, PaginatedResponse } from '@bookshelf/shared';
 import * as booksRepository from '../data/books.repository.js';
+import * as shelvesRepository from '../data/shelves.repository.js';
 
 const DEFAULT_PAGE = 1;
 const DEFAULT_LIMIT = 10;
@@ -39,6 +40,12 @@ export async function createBook(
   payload: Parameters<typeof booksRepository.createBook>[0],
 ): Promise<Book> {
   return booksRepository.createBook(payload);
+}
+
+export async function deleteBook(id: string): Promise<{ id: string; removedFromShelves: number }> {
+  await booksRepository.deleteBook(id);
+  const removedFromShelves = await shelvesRepository.removeBookFromAllShelves(id);
+  return { id, removedFromShelves };
 }
 
 export async function searchBooks(query: string): Promise<Book[]> {

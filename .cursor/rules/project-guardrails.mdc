@@ -1,0 +1,16 @@
+---
+description: Project-wide guardrails for BookShelf — always apply
+globs:
+alwaysApply: true
+---
+
+# BookShelf guardrails
+
+- Do NOT add a real database. The JSON file store in `/data` is deliberate.
+- Do NOT add new npm dependencies without discussing first.
+- Do NOT use `console.log`. Use the `requestLogger` middleware, or remove debug output.
+- Do NOT modify `packages/shared` without checking its consumers in `apps/api`.
+- File naming is intentionally two patterns — do not "normalize" them:
+  - entity-scoped modules → `entity.role.ts` (`books.repository.ts`, `books.service.ts`)
+  - generic utilities → camelCase (`jsonStore.ts`, `errorHandler.ts`)
+- Node 20+, ESM (`"type": "module"`) — use `.js` extensions in relative imports.

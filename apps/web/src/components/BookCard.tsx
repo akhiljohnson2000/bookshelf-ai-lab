@@ -2,11 +2,15 @@ import type { Book } from '@bookshelf/shared';
 
 interface BookCardProps {
   book: Book;
+  onSelect: (book: Book) => void;
 }
 
-export function BookCard({ book }: BookCardProps) {
+export function BookCard({ book, onSelect }: BookCardProps) {
   return (
-    <article className="flex h-full flex-col rounded-2xl border border-cream-dark bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg">
+    <article
+      onClick={() => onSelect(book)}
+      className="flex h-full cursor-pointer flex-col rounded-2xl border border-cream-dark bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg"
+    >
       <div className="mb-3 flex items-start justify-between gap-3">
         <span className="rounded-full bg-forest px-3 py-1 text-xs font-medium uppercase tracking-wide text-cream">
           {book.genre}

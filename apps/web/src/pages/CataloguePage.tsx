@@ -1,11 +1,14 @@
 import { useState } from 'react';
+import type { Book } from '@bookshelf/shared';
 import { useBooks } from '../hooks/useBooks';
 import { SearchBar } from '../components/SearchBar';
 import { BookGrid } from '../components/BookGrid';
+import { BookDetail } from '../components/BookDetail';
 
 export function CataloguePage() {
   const [query, setQuery] = useState('');
   const { books, loading, error } = useBooks(query);
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
   return (
     <div className="min-h-screen">
@@ -41,10 +44,14 @@ export function CataloguePage() {
             <p className="mb-5 text-sm text-brown-light">
               {books.length} {books.length === 1 ? 'book' : 'books'}
             </p>
-            <BookGrid books={books} />
+            <BookGrid books={books} onSelect={setSelectedBook} />
           </>
         )}
       </main>
+
+      {selectedBook && (
+        <BookDetail book={selectedBook} onClose={() => setSelectedBook(null)} />
+      )}
     </div>
   );
 }

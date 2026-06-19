@@ -43,6 +43,12 @@ export interface CreateReviewPayload {
   userId?: string;
 }
 
+export interface BookRating {
+  bookId: string;
+  average: number | null;
+  count: number;
+}
+
 export interface PaginationMeta {
   page: number;
   limit: number;

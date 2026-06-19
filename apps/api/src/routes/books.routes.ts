@@ -85,6 +85,15 @@ router.get('/:id/reviews', async (req: Request, res: Response, next: NextFunctio
   }
 });
 
+router.get('/:id/rating', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const rating = await reviewsService.getBookRating(String(req.params.id));
+    res.json({ success: true, data: rating });
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.post(
   '/:id/reviews',
   validateReviewPayload,
